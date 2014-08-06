@@ -1,13 +1,13 @@
-pprof
-=====
+toolbox
+=======
 
-Middleware pprof provides pprof service for [Macaron](https://github.com/Unknwon/macaron).
+Middleware toolbox provides health chcek, pprof, profile and statistic services for [Macaron](https://github.com/Unknwon/macaron).
 
-[API Reference](https://gowalker.org/github.com/macaron-contrib/pprof)
+[API Reference](https://gowalker.org/github.com/macaron-contrib/toolbox)
 
 ### Installation
 
-	go get github.com/macaron-contrib/pprof
+	go get github.com/macaron-contrib/toolbox
 	
 ## Usage
 
@@ -15,12 +15,12 @@ Middleware pprof provides pprof service for [Macaron](https://github.com/Unknwon
 // main.go
 import (
 	"github.com/Unknwon/macaron"
-	"github.com/macaron-contrib/pprof"
+	"github.com/macaron-contrib/toolbox"
 )
 
 func main() {
   	m := macaron.Classic()
-  	m.Use(pprof.Pprofer())
+  	m.Use(toolbox.Toolboxer(m))
 	m.Run()
 }
 ```
