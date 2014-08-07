@@ -31,8 +31,7 @@ func TestStatistic(t *testing.T) {
 	tb.AddStatistics("POST", "/api/user", time.Duration(120000))
 	tb.AddStatistics("GET", "/api/user", time.Duration(13000))
 	tb.AddStatistics("POST", "/api/admin", time.Duration(14000))
-	tb.AddStatistics("POST", "/api/user/astaxie", time.Duration(12000))
-	tb.AddStatistics("POST", "/api/user/xiemengjun", time.Duration(13000))
+	tb.AddStatistics("POST", "/api/user/unknwon", time.Duration(12000))
 	tb.AddStatistics("DELETE", "/api/user", time.Duration(1400))
 	tb.GetMap(os.Stdout)
 }
