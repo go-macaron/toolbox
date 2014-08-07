@@ -25,6 +25,8 @@ func main() {
 }
 ```
 
+Open your browser and visit `http://localhost:4000/debug` to see the effects.
+
 ## Options
 
 `toolbox.Toolboxer` comes with a variety of configuration options:
@@ -43,6 +45,7 @@ func (dc *dummyChecker) Check() error {
 
 // ...
 m.Use(toolbox.Toolboxer(m, toolbox.Options{
+	URLPrefix:			"/debug",			// URL prefix for toolbox dashboard.
 	HealthCheckURL:		"/healthcheck", 	// URL for health check request.
 	HealthCheckers: []HealthChecker{
 		new(dummyChecker),

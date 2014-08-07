@@ -16,6 +16,7 @@
 package toolbox
 
 import (
+	"fmt"
 	"io"
 	"net/http/pprof"
 	"path"
@@ -39,6 +40,8 @@ type toolbox struct {
 
 // Options represents a struct for specifying configuration options for the Toolbox middleware.
 type Options struct {
+	// URL prefix for toolbox dashboard. Default is "/debug".
+	URLPrefix string
 	// URL for health check request. Default is "/healthcheck".
 	HealthCheckURL string
 	// Health checkers.
@@ -61,6 +64,9 @@ func prepareOptions(options []Options) {
 	}
 
 	// Defaults.
+	if len(opt.URLPrefix) == 0 {
+		opt.URLPrefix = "/debug"
+	}
 	if len(opt.HealthCheckURL) == 0 {
 		opt.HealthCheckURL = "/healthcheck"
 	}
@@ -79,12 +85,23 @@ func prepareOptions(options []Options) {
 	}
 }
 
+func dashboard(ctx *macaron.Context) {
+	ctx.RenderData(200, []byte(fmt.Sprintf(`<p>Toolbox Index:</p>
+<ol>
+	<li><a href="%s">Pprof Information</a></li>
+	<li><a href="%s">Profile Operations</a></li>
+</ol>`, opt.PprofURLPrefix, opt.ProfileURLPrefix)))
+}
+
 // Toolboxer is a middleware provides health check, pprof, profile and statistic services for your application.
 func Toolboxer(m *macaron.Macaron, options ...Options) macaron.Handler {
 	prepareOptions(options)
 	t := &toolbox{
 		healthCheckJobs: make([]*healthCheck, 0, len(opt.HealthCheckers)+len(opt.HealthCheckFuncs)),
 	}
+
+	// Dashboard.
+	m.Get(opt.URLPrefix, dashboard)
 
 	// Health check.
 	for _, hc := range opt.HealthCheckers {
