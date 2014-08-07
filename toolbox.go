@@ -16,8 +16,10 @@
 package toolbox
 
 import (
+	"io"
 	"net/http/pprof"
 	"path"
+	"time"
 
 	"github.com/Unknwon/macaron"
 )
@@ -26,9 +28,12 @@ import (
 type Toolbox interface {
 	AddHealthCheck(string, HealthChecker)
 	AddHealthCheckFunc(string, HealthCheckFunc)
+	AddStatistics(string, string, time.Duration)
+	GetMap(io.Writer)
 }
 
 type toolbox struct {
+	*UrlMap
 	healthCheckJobs []*healthCheck
 }
 
@@ -100,6 +105,11 @@ func Toolboxer(m *macaron.Macaron, options ...Options) macaron.Handler {
 	// Profile.
 	profilePath = opt.ProfilePath
 	m.Get(opt.ProfileURLPrefix, handleProfile)
+
+	// Routes statistic.
+	t.UrlMap = &UrlMap{
+		urlmap: make(map[string]map[string]*Statistics),
+	}
 
 	return func(ctx *macaron.Context) {
 		ctx.MapTo(t, (*Toolbox)(nil))
