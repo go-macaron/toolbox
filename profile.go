@@ -132,34 +132,31 @@ func DumpGCSummary(w io.Writer) {
 	dumpGC(memStats, gcstats, w)
 }
 
-func handleProfile(ctx *macaron.Context) {
+func handleProfile(ctx *macaron.Context) string {
 	switch ctx.Query("op") {
 	case "startcpu":
 		if err := StartCPUProfile(); err != nil {
-			ctx.RenderData(200, []byte(err.Error()))
-			return
+			return err.Error()
 		}
 	case "stopcpu":
 		if err := StopCPUProfile(); err != nil {
-			ctx.RenderData(200, []byte(err.Error()))
-			return
+			return err.Error()
 		}
 	case "mem":
 		dumpMemProf()
 	case "gc":
 		var buf bytes.Buffer
 		DumpGCSummary(&buf)
-		ctx.RenderData(200, buf.Bytes())
-		return
+		return string(buf.Bytes())
 	default:
-		ctx.RenderData(200, []byte(fmt.Sprintf(`<p>Available operations:</p>
+		return fmt.Sprintf(`<p>Available operations:</p>
 <ol>
 	<li><a href="%s?op=startcpu">Start CPU profile</a></li>
 	<li><a href="%s?op=stopcpu">Stop CPU profile</a></li>
 	<li><a href="%s?op=mem">Dump memory profile</a></li>
 	<li><a href="%s?op=gc">Dump GC summary</a></li>
-</ol>`, opt.ProfileURLPrefix, opt.ProfileURLPrefix, opt.ProfileURLPrefix, opt.ProfileURLPrefix)))
-		return
+</ol>`, opt.ProfileURLPrefix, opt.ProfileURLPrefix, opt.ProfileURLPrefix, opt.ProfileURLPrefix)
 	}
 	ctx.Redirect(opt.ProfileURLPrefix)
+	return ""
 }

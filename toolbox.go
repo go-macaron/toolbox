@@ -85,12 +85,12 @@ func prepareOptions(options []Options) {
 	}
 }
 
-func dashboard(ctx *macaron.Context) {
-	ctx.RenderData(200, []byte(fmt.Sprintf(`<p>Toolbox Index:</p>
-<ol>
-	<li><a href="%s">Pprof Information</a></li>
-	<li><a href="%s">Profile Operations</a></li>
-</ol>`, opt.PprofURLPrefix, opt.ProfileURLPrefix)))
+func dashboard(ctx *macaron.Context) string {
+	return fmt.Sprintf(`<p>Toolbox Index:</p>
+	<ol>
+	    <li><a href="%s">Pprof Information</a></li>
+        <li><a href="%s">Profile Operations</a></li>
+	</ol>`, opt.PprofURLPrefix, opt.ProfileURLPrefix)
 }
 
 // Toolboxer is a middleware provides health check, pprof, profile and statistic services for your application.
