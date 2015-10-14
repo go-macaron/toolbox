@@ -1,21 +1,21 @@
 toolbox
 =======
 
-Middleware toolbox provides health chcek, pprof, profile and statistic services for [Macaron](https://github.com/Unknwon/macaron).
+Middleware toolbox provides health chcek, pprof, profile and statistic services for [Macaron](https://github.com/go-macaron/macaron).
 
-[API Reference](https://gowalker.org/github.com/macaron-contrib/toolbox)
+[API Reference](https://gowalker.org/github.com/go-macaron/toolbox)
 
 ### Installation
 
-	go get github.com/macaron-contrib/toolbox
+	go get github.com/go-macaron/toolbox
 	
 ## Usage
 
 ```go
 // main.go
 import (
-	"github.com/Unknwon/macaron"
-	"github.com/macaron-contrib/toolbox"
+	"gopkg.in/macaron.v1"
+	"github.com/go-macaron/toolbox"
 )
 
 func main() {
@@ -72,7 +72,7 @@ import (
 	"os"
 	"time"
 	//...
-	"github.com/macaron-contrib/toolbox"
+	"github.com/go-macaron/toolbox"
 )
 
 func main() {

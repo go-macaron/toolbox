@@ -1,4 +1,4 @@
-// Copyright 2014 Unknwon
+// Copyright 2014 The Macaron Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License"): you may
 // not use this file except in compliance with the License. You may obtain
@@ -21,8 +21,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/Unknwon/macaron"
 	. "github.com/smartystreets/goconvey/convey"
+	"gopkg.in/macaron.v1"
 )
 
 type dummyChecker struct {
