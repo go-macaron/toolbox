@@ -34,4 +34,5 @@ func TestStatistic(t *testing.T) {
 	tb.AddStatistics("POST", "/api/user/unknwon", time.Duration(12000))
 	tb.AddStatistics("DELETE", "/api/user", time.Duration(1400))
 	tb.GetMap(os.Stdout)
+	tb.JSON(os.Stdout)
 }

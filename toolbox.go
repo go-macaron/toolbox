@@ -18,6 +18,7 @@ package toolbox
 import (
 	"fmt"
 	"io"
+	"net/http"
 	"net/http/pprof"
 	"path"
 	"time"
@@ -48,6 +49,8 @@ type Options struct {
 	HealthCheckers []HealthChecker
 	// Health check functions.
 	HealthCheckFuncs []*HealthCheckFuncDesc
+	// URL for URL map json. Default is "/urlmap.json".
+	URLMapPrefix string
 	// URL prefix of pprof. Default is "/debug/pprof/".
 	PprofURLPrefix string
 	// URL prefix of profile. Default is "/debug/profile/".
@@ -70,6 +73,9 @@ func prepareOptions(options []Options) {
 	if len(opt.HealthCheckURL) == 0 {
 		opt.HealthCheckURL = "/healthcheck"
 	}
+	if len(opt.URLMapPrefix) == 0 {
+		opt.URLMapPrefix = "/urlmap.json"
+	}
 	if len(opt.PprofURLPrefix) == 0 {
 		opt.PprofURLPrefix = "/debug/pprof/"
 	} else if opt.PprofURLPrefix[len(opt.PprofURLPrefix)-1] != '/' {
@@ -85,12 +91,13 @@ func prepareOptions(options []Options) {
 	}
 }
 
-func dashboard(ctx *macaron.Context) string {
-	return fmt.Sprintf(`<p>Toolbox Index:</p>
+func dashboard(ctx *macaron.Context) {
+	ctx.Resp.Header().Set("Content-Type", "text/html")
+	ctx.RenderData(200, []byte(fmt.Sprintf(`<p>Toolbox Index:</p>
 	<ol>
 	    <li><a href="%s">Pprof Information</a></li>
         <li><a href="%s">Profile Operations</a></li>
-	</ol>`, opt.PprofURLPrefix, opt.ProfileURLPrefix)
+	</ol>`, opt.PprofURLPrefix, opt.ProfileURLPrefix)))
 }
 
 // Toolboxer is a middleware provides health check, pprof, profile and statistic services for your application.
@@ -111,6 +118,11 @@ func Toolboxer(m *macaron.Macaron, options ...Options) macaron.Handler {
 		t.AddHealthCheckFunc(fd.Desc, fd.Func)
 	}
 	m.Get(opt.HealthCheckURL, t.handleHealthCheck)
+
+	// URL map.
+	m.Get(opt.URLMapPrefix, func(rw http.ResponseWriter) {
+		t.JSON(rw)
+	})
 
 	// Pprof.
 	m.Any(path.Join(opt.PprofURLPrefix, "cmdline"), pprof.Cmdline)
