@@ -25,6 +25,12 @@ import (
 	"gopkg.in/macaron.v1"
 )
 
+const _VERSION = "0.1.0"
+
+func Version() string {
+	return _VERSION
+}
+
 // Toolbox represents a tool box service for Macaron instance.
 type Toolbox interface {
 	AddHealthCheck(string, HealthChecker)

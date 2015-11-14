@@ -45,6 +45,7 @@ func StartCPUProfile() error {
 	}
 	inCPUProfile = true
 
+	os.MkdirAll(profilePath, os.ModePerm)
 	f, err := os.Create(path.Join(profilePath, "cpu-"+com.ToStr(pid)+".pprof"))
 	if err != nil {
 		panic("fail to record CPU profile: " + err.Error())
