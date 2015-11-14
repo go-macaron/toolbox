@@ -16,6 +16,7 @@
 package toolbox
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"strings"
@@ -103,4 +104,35 @@ func (m *UrlMap) GetMap(w io.Writer) {
 		}
 	}
 	fmt.Fprintf(w, sep)
+}
+
+type URLMapInfo struct {
+	URL       string  `json:"url"`
+	Method    string  `json:"method"`
+	Times     int64   `json:"times"`
+	TotalUsed float64 `json:"total_used"`
+	MaxUsed   float64 `json:"max_used"`
+	MinUsed   float64 `json:"min_used"`
+	AvgUsed   float64 `json:"avg_used"`
+}
+
+func (m *UrlMap) JSON(w io.Writer) {
+	infos := make([]*URLMapInfo, 0, len(m.urlmap))
+	for k, v := range m.urlmap {
+		for kk, vv := range v {
+			infos = append(infos, &URLMapInfo{
+				URL:       k,
+				Method:    kk,
+				Times:     vv.RequestNum,
+				TotalUsed: vv.TotalTime.Seconds(),
+				MaxUsed:   float64(vv.MaxTime.Nanoseconds()) / 1000,
+				MinUsed:   float64(vv.MinTime.Nanoseconds()) / 1000,
+				AvgUsed:   float64(time.Duration(int64(vv.TotalTime)/vv.RequestNum).Nanoseconds()) / 1000,
+			})
+		}
+	}
+
+	if err := json.NewEncoder(w).Encode(infos); err != nil {
+		panic("URLMap.JSON: " + err.Error())
+	}
 }

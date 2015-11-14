@@ -18,6 +18,7 @@ package toolbox
 import (
 	"fmt"
 	"io"
+	"net/http"
 	"net/http/pprof"
 	"path"
 	"time"
@@ -54,6 +55,8 @@ type Options struct {
 	HealthCheckers []HealthChecker
 	// Health check functions.
 	HealthCheckFuncs []*HealthCheckFuncDesc
+	// URL for URL map json. Default is "/urlmap.json".
+	URLMapPrefix string
 	// URL prefix of pprof. Default is "/debug/pprof/".
 	PprofURLPrefix string
 	// URL prefix of profile. Default is "/debug/profile/".
@@ -75,6 +78,9 @@ func prepareOptions(options []Options) {
 	}
 	if len(opt.HealthCheckURL) == 0 {
 		opt.HealthCheckURL = "/healthcheck"
+	}
+	if len(opt.URLMapPrefix) == 0 {
+		opt.URLMapPrefix = "/urlmap.json"
 	}
 	if len(opt.PprofURLPrefix) == 0 {
 		opt.PprofURLPrefix = "/debug/pprof/"
@@ -117,6 +123,11 @@ func Toolboxer(m *macaron.Macaron, options ...Options) macaron.Handler {
 		t.AddHealthCheckFunc(fd.Desc, fd.Func)
 	}
 	m.Get(opt.HealthCheckURL, t.handleHealthCheck)
+
+	// URL map.
+	m.Get(opt.URLMapPrefix, func(rw http.ResponseWriter) {
+		t.JSON(rw)
+	})
 
 	// Pprof.
 	m.Any(path.Join(opt.PprofURLPrefix, "cmdline"), pprof.Cmdline)
