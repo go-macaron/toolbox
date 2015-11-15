@@ -152,11 +152,11 @@ func handleProfile(ctx *macaron.Context) string {
 	default:
 		return fmt.Sprintf(`<p>Available operations:</p>
 <ol>
-	<li><a href="%s?op=startcpu">Start CPU profile</a></li>
-	<li><a href="%s?op=stopcpu">Stop CPU profile</a></li>
-	<li><a href="%s?op=mem">Dump memory profile</a></li>
-	<li><a href="%s?op=gc">Dump GC summary</a></li>
-</ol>`, opt.ProfileURLPrefix, opt.ProfileURLPrefix, opt.ProfileURLPrefix, opt.ProfileURLPrefix)
+	<li><a href="%[1]s?op=startcpu">Start CPU profile</a></li>
+	<li><a href="%[1]s?op=stopcpu">Stop CPU profile</a></li>
+	<li><a href="%[1]s?op=mem">Dump memory profile</a></li>
+	<li><a href="%[1]s?op=gc">Dump GC summary</a></li>
+</ol>`, opt.ProfileURLPrefix)
 	}
 	ctx.Redirect(opt.ProfileURLPrefix)
 	return ""
