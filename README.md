@@ -77,7 +77,7 @@ import (
 
 func main() {
 	//...
-	m.Get("/", func(t *toolbox.Toolbox) {
+	m.Get("/", func(t toolbox.Toolbox) {
 		start := time.Now()
 		
 		// Other operations.
@@ -85,7 +85,7 @@ func main() {
 		t.AddStatistics("GET", "/", time.Since(start))
 	})
 	
-	m.Get("/dump", func(t *toolbox.Toolbox) {
+	m.Get("/dump", func(t toolbox.Toolbox) {
 		t.GetMap(os.Stdout)
 	})
 }

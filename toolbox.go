@@ -26,7 +26,7 @@ import (
 	"gopkg.in/macaron.v1"
 )
 
-const _VERSION = "0.1.0"
+const _VERSION = "0.1.1"
 
 func Version() string {
 	return _VERSION
@@ -34,7 +34,7 @@ func Version() string {
 
 // Toolbox represents a tool box service for Macaron instance.
 type Toolbox interface {
-	AddHealthCheck(string, HealthChecker)
+	AddHealthCheck(HealthChecker)
 	AddHealthCheckFunc(string, HealthCheckFunc)
 	AddStatistics(string, string, time.Duration)
 	GetMap(io.Writer)
@@ -104,6 +104,8 @@ func dashboard(ctx *macaron.Context) string {
         <li><a href="%s">Profile Operations</a></li>
 	</ol>`, opt.PprofURLPrefix, opt.ProfileURLPrefix)
 }
+
+var _ Toolbox = &toolbox{}
 
 // Toolboxer is a middleware provides health check, pprof, profile and statistic services for your application.
 func Toolboxer(m *macaron.Macaron, options ...Options) macaron.Handler {
