@@ -26,7 +26,7 @@ import (
 	"gopkg.in/macaron.v1"
 )
 
-const _VERSION = "0.1.1"
+const _VERSION = "0.1.2"
 
 func Version() string {
 	return _VERSION
@@ -38,6 +38,7 @@ type Toolbox interface {
 	AddHealthCheckFunc(string, HealthCheckFunc)
 	AddStatistics(string, string, time.Duration)
 	GetMap(io.Writer)
+	JSON(io.Writer)
 }
 
 type toolbox struct {
