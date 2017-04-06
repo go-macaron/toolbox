@@ -23,7 +23,7 @@ import (
 	"path"
 	"time"
 
-	"gopkg.in/macaron.v1"
+	"github.com/go-macaron/macaron"
 )
 
 const _VERSION = "0.1.3"
