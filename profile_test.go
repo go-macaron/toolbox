@@ -23,6 +23,6 @@ func TestProfile(t *testing.T) {
 	DumpGCSummary(os.Stdout)
 	DumpMemProf(os.Stdout)
 	dumpMemProf()
-	StartCPUProfile()
-	StopCPUProfile()
+	_ = StartCPUProfile()
+	_ = StopCPUProfile()
 }
